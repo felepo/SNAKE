@@ -55,15 +55,15 @@ function inicio()
 
 	//Al momento de presionar una tecla se dispara la función llamada teclado()
 	//con el argumento keydown que son los datos que representa a la tecla oprimida
-	direccion = teclas.LEFT;
-	moverSnake();
+	//direccion = teclas.RIGHT;
+	direccionSnake();
 }
 
 //Se obtienen los datos de la tecla presionada
 function teclado(datos)
 {
 	//Se guarda en "codigo" el número que representa a la tecla oprimida
-	var codigo = datos.keyCode;
+	var codigo = datos;
 
 	if( codigo == teclas.UP )
 	{
@@ -82,22 +82,27 @@ function teclado(datos)
 		snake.x += snake.velocidad;
 	}
 
-	dibujar();
+	setTimeout(dibujar, 1000);
 }
 
 
+function direccionSnake()
+{
+    document.addEventListener("keydown", function(dir){
+        direccion = dir.keyCode;
+        moverSnake();
+    });
+}
+
 function moverSnake()
 {
-	var x = 1;
-	do
-	{
-		
-		document.addEventListener( "keydown", teclado );
-		console.log(direccion);
-		teclado(direccion);
-		x++;
-
-	} while ( x <= 10 );
+    var x = 0;
+    setTimeout(function(){
+        while(x < 5){
+        teclado(direccion)
+        x++;
+        }
+    }, 1000);
 }
 
 function dibujar()
