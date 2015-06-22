@@ -1,5 +1,6 @@
 var tablero;
 var direccion;
+var tiempo;
 
 var teclas =
 {
@@ -21,7 +22,7 @@ var snake =
 	y: 100,
 	imagenURL: "snake.png",
 	imagenOK: false,
-	velocidad: 50
+	velocidad: 1
 };
 
 /*var comida =
@@ -64,6 +65,9 @@ function teclado(datos)
 {
 	//Se guarda en "codigo" el número que representa a la tecla oprimida
 	var codigo = datos;
+	tiempo = tiempo + 1;
+
+	console.log(tiempo);
 
 	if( codigo == teclas.UP )
 	{
@@ -82,27 +86,28 @@ function teclado(datos)
 		snake.x += snake.velocidad;
 	}
 
-	setTimeout(dibujar, 1000);
+	dibujar();
 }
 
 
 function direccionSnake()
 {
     document.addEventListener("keydown", function(dir){
+    	  
         direccion = dir.keyCode;
         moverSnake();
+        clearInterval( tiempo );
     });
 }
 
 function moverSnake()
-{
-    var x = 0;
-    setTimeout(function(){
-        while(x < 5){
-        teclado(direccion)
-        x++;
-        }
-    }, 1000);
+{   
+     tiempo = setInterval( function()
+    					{
+    						teclado(direccion)
+
+    					}, 1000);
+
 }
 
 function dibujar()
