@@ -54,6 +54,11 @@ function inicio()
 	snake.imagen.src = snake.imagenURL;
 	snake.imagen.onload = confirmarSnake;
 
+	//--------cargando la comida----------------
+	comida.imagen = new Image();
+	comida.imagen.src = comida.imagenURL;
+	comida.imagen.onload = confirmarComida; 
+
 	//--------Cargando comida del Snake
 	/*comida.imagen = new Image();
 	comida.imagen.src = comida.imagenURL;
@@ -91,9 +96,6 @@ function teclado(datos)
 
 	dibujar();
 }
-function dibujarComida(){
-
-}
 
 function PosicionesComida(){
 	comida.x=(int)(Math.random()*500);
@@ -113,13 +115,29 @@ function posicionesYComida(){
 			posicionesYComida();
 		}
 }
+function dibujarComida(){
+	PosicionesComida();
+	if( fondo.imagenOK == true )
+	{
+		tablero.drawImage( fondo.imagen, 0, 0 );
+	}
 
+	//Luego seguimos con el snake
+	if( snake.imagenOK == true )
+	{
+		tablero.drawImage( snake.imagen, snake.x, snake.y );
+	}
+	if (comida.imagenOK==true) {
+		tablero.drawImage( snake.imagen, snake.x, snake.y );
+	} 
+}
 function direccionSnake()
 {
     document.addEventListener("keydown", function(dir){
     	  
         direccion = dir.keyCode;
         moverSnake();
+        dibujarComida();
     });
 }
 
@@ -147,7 +165,6 @@ function dibujar()
 	{
 		tablero.drawImage( snake.imagen, snake.x, snake.y );
 	}
-
 	/*
 	if( comida.imagenOK == true )
 	{
@@ -167,6 +184,10 @@ function confirmarSnake()
 	dibujar();
 }
 
+function confirmarComida()
+{
+	comida.imagenOK = true;
+}
 /*function confirmarComida()
 {
 	comida.imagenOK = true;
