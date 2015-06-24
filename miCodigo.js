@@ -1,6 +1,6 @@
 var tablero;
 var direccion;
-var tiempo;
+var tiempo = 0;
 
 var teclas =
 {
@@ -61,29 +61,51 @@ function inicio()
 }
 
 //Se obtienen los datos de la tecla presionada
-function teclado(datos)
+function teclado(dir)
 {
 	//Se guarda en "codigo" el número que representa a la tecla oprimida
-	var codigo = datos;
-	tiempo = tiempo + 1;
+	//var codigo = datos.keyCode;
+	//tiempo = tiempo + 1;
 
-	console.log(tiempo);
+	//console.log(tiempo);
+
+	var codigo = dir;
 
 	if( codigo == teclas.UP )
 	{
 		snake.y -= snake.velocidad;
+
+		if( snake.y < 0 )
+		{
+			snake.y = 500;
+		}
 	}
 	if( codigo == teclas.DOWN )
 	{
 		snake.y += snake.velocidad;
+
+		if( snake.y > 500 )
+		{
+			snake.y = 0;
+		}
 	}
 	if( codigo == teclas.LEFT )
 	{
 		snake.x -= snake.velocidad;
+		
+		if( snake.x < 0 )
+		{
+			snake.x = 500;
+		}
 	}
 	if( codigo == teclas.RIGHT )
 	{
 		snake.x += snake.velocidad;
+		
+		if( snake.x > 500 )
+		{
+			snake.x = 0;
+		}
 	}
 
 	dibujar();
@@ -92,23 +114,46 @@ function teclado(datos)
 
 function direccionSnake()
 {
+	setInterval( 
+		function()
+		{
+			document.addEventListener("keydown", 
+				function(datos)
+				{
+					if( (datos.keyCode == teclas.UP) || (datos.keyCode == teclas.DOWN) || 
+						(datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) )
+					{
+						direccion = datos.keyCode;
+					}
+				});
+
+			teclado( direccion );
+		}
+		, 10 );
+
+
+
+/*
     document.addEventListener("keydown", function(dir){
     	  
         direccion = dir.keyCode;
         moverSnake();
-        clearInterval( tiempo );
-    });
+    });*/
 }
 
 function moverSnake()
 {   
-     tiempo = setInterval( function()
+     
+/*
+
+     setInterval( function()
     					{
     						teclado(direccion)
 
     					}, 1000);
-
+*/
 }
+
 
 function dibujar()
 {
