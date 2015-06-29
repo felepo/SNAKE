@@ -16,14 +16,16 @@ var fondo =
 	imagenOK: false
 };
 
-var snake =
-{
-	x: 100,
-	y: 100,
-	imagenURL: "snake.png",
-	imagenOK: false,
-	velocidad: 1
-};
+var snake = 
+[
+	{
+	    x: 100,
+	    y: 100,
+	    imagenURL: "snake.png",
+	    imagenOK: false,
+	    velocidad: 40
+   }
+];
 
 /*var comida =
 {
@@ -45,9 +47,9 @@ function inicio()
 	fondo.imagen.onload = confirmarFondo;
 
 	//---------Cargando el snake-------------------
-	snake.imagen = new Image();
-	snake.imagen.src = snake.imagenURL;
-	snake.imagen.onload = confirmarSnake;
+	 snake[0].imagen = new Image();
+    snake[0].imagen.src = snake[0].imagenURL;
+    snake[0].imagen.onload = confirmarSnake;
 
 	//--------Cargando comida del Snake
 	/*comida.imagen = new Image();
@@ -73,39 +75,79 @@ function teclado(dir)
 
 	if( codigo == teclas.UP )
 	{
-		snake.y -= snake.velocidad;
-
-		if( snake.y < 0 )
+		
+		for(var i = snake.length - 1; i > 0; i--)
 		{
-			snake.y = 500;
+	   	snake[i].y = snake[i-1].y;
+	      snake[i].x = snake[i-1].x;
+      }
+
+		snake[0].y -= snake[0].velocidad;
+
+		if( snake[0].y < 0 )
+		{
+			snake[0].y = 500;
 		}
 	}
+
 	if( codigo == teclas.DOWN )
 	{
-		snake.y += snake.velocidad;
-
-		if( snake.y > 500 )
+		for(var i = snake.length - 1; i > 0; i--)
 		{
-			snake.y = 0;
+	   	snake[i].y = snake[i-1].y;
+	   	snake[i].x = snake[i-1].x;
+	   }
+
+		snake[0].y += snake[0].velocidad;
+
+		if( snake[0].y > 500 )
+		{
+			snake[0].y = 0;
 		}
 	}
+
 	if( codigo == teclas.LEFT )
 	{
-		snake.x -= snake.velocidad;
-		
-		if( snake.x < 0 )
+		for(var i = snake.length - 1; i > 0; i--)
 		{
-			snake.x = 500;
+	   	snake[i].x = snake[i-1].x;
+	   	snake[i].y = snake[i-1].y;
+      }
+
+		snake[0].x -= snake[0].velocidad;
+		
+		if( snake[0].x < 0 )
+		{
+			snake[0].x = 500;
 		}
 	}
+
 	if( codigo == teclas.RIGHT )
 	{
-		snake.x += snake.velocidad;
-		
-		if( snake.x > 500 )
+		for(var i = snake.length - 1; i > 0; i--)
 		{
-			snake.x = 0;
+	   	snake[i].x = snake[i-1].x;
+	   	snake[i].y = snake[i-1].y;
+      }
+
+		snake[0].x += snake[0].velocidad;
+		
+		if( snake[0].x > 500 )
+		{
+			snake[0].x = 0;
 		}
+	}
+
+	//Crecer el cuerpo con la tecla n
+	if(codigo == 78)
+	{
+	    var previous = snake.length - 1;
+	    
+	    snake.push(
+	    {
+	    	x: snake[previous].x - 40,
+	    	y: snake[previous].y,
+       });
 	}
 
 	dibujar();
@@ -121,7 +163,8 @@ function direccionSnake()
 				function(datos)
 				{
 					if( (datos.keyCode == teclas.UP) || (datos.keyCode == teclas.DOWN) || 
-						(datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) )
+						 (datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) ||
+						 (datos.keyCode == 78) )
 					{
 						direccion = datos.keyCode;
 					}
@@ -129,16 +172,7 @@ function direccionSnake()
 
 			teclado( direccion );
 		}
-		, 10 );
-
-
-
-/*
-    document.addEventListener("keydown", function(dir){
-    	  
-        direccion = dir.keyCode;
-        moverSnake();
-    });*/
+		, 500 );
 }
 
 function moverSnake()
@@ -165,9 +199,18 @@ function dibujar()
 	}
 
 	//Luego seguimos con el snake
-	if( snake.imagenOK == true )
+	/*if( snake.imagenOK == true )
 	{
 		tablero.drawImage( snake.imagen, snake.x, snake.y );
+	}
+	*/
+
+	for(var i in snake)
+	{
+		if( snake[0].imagenOK == true )
+	   {
+			tablero.drawImage( snake[0].imagen, snake[i].x, snake[i].y );
+		}
 	}
 
 	/*
@@ -185,7 +228,7 @@ function confirmarFondo()
 
 function confirmarSnake()
 {
-	snake.imagenOK = true;
+	snake[0].imagenOK = true;
 	dibujar();
 }
 
