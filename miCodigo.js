@@ -27,55 +27,48 @@ var snake =
    }
 ];
 
-/*var comida =
+var comida =
 {
-	x: 0,
-	y: 0,
+	x: 300,
+	y: 300,
 	imagenURL: "comida.png",
 	imagenOK: false
-};*/
+};
 
-
+//-----------------------------INICIO DE LA FUNCION INICIAL-----------------------------
 function inicio()
 {
 	var canvas = document.getElementById("campoJuego");
 	tablero = canvas.getContext("2d");
 	
-	//---------Cargando el fondo negro-------------
+	//Cargando el fondo negro
 	fondo.imagen = new Image();
 	fondo.imagen.src = fondo.imagenURL;
 	fondo.imagen.onload = confirmarFondo;
 
-	//---------Cargando el snake-------------------
+	//Cargando el snake
 	 snake[0].imagen = new Image();
     snake[0].imagen.src = snake[0].imagenURL;
     snake[0].imagen.onload = confirmarSnake;
 
-	//--------Cargando comida del Snake
-	/*comida.imagen = new Image();
+	//Cargando comida del Snake
+	comida.imagen = new Image();
 	comida.imagen.src = comida.imagenURL;
-	snake.imagen.onload = confirmarComida;*/
+	comida.imagen.onload = confirmarComida;
 
-	//Al momento de presionar una tecla se dispara la función llamada teclado()
-	//con el argumento keydown que son los datos que representa a la tecla oprimida
 	//direccion = teclas.RIGHT;
 	direccionSnake();
 }
+//-------------------------------FIN DE LA FUNCION INICIAL------------------------------
 
-//Se obtienen los datos de la tecla presionada
+
+//-----------------------------INICIO DE LA FUNCION TECLADO-----------------------------
 function teclado(dir)
 {
-	//Se guarda en "codigo" el número que representa a la tecla oprimida
-	//var codigo = datos.keyCode;
-	//tiempo = tiempo + 1;
-
-	//console.log(tiempo);
-
 	var codigo = dir;
 
 	if( codigo == teclas.UP )
 	{
-		
 		for(var i = snake.length - 1; i > 0; i--)
 		{
 	   	snake[i].y = snake[i-1].y;
@@ -145,15 +138,17 @@ function teclado(dir)
 	    
 	    snake.push(
 	    {
-	    	x: snake[previous].x - 40,
+	    	x: snake[previous].x,
 	    	y: snake[previous].y,
        });
 	}
 
 	dibujar();
 }
+//-------------------------------FIN DE LA FUNCION INICIAL------------------------------
 
 
+//-----------------------INICIO DE LA FUNCION DIRECCION SNAKE---------------------------
 function direccionSnake()
 {
 	setInterval( 
@@ -162,11 +157,48 @@ function direccionSnake()
 			document.addEventListener("keydown", 
 				function(datos)
 				{
+					//Filtramos el codigo de la tecla para que sea una tecla valida
 					if( (datos.keyCode == teclas.UP) || (datos.keyCode == teclas.DOWN) || 
 						 (datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) ||
 						 (datos.keyCode == 78) )
 					{
-						direccion = datos.keyCode;
+						//Luego de filtrar teclas validas, filtramos movimientos validos
+						if( datos.keyCode == teclas.UP )
+						{
+							if( direccion != teclas.DOWN )
+							{
+								direccion = datos.keyCode;
+							}
+						}
+
+						if( datos.keyCode == teclas.DOWN )
+						{
+							if( direccion != teclas.UP )
+							{
+								direccion = datos.keyCode;
+							}
+						}
+
+						if( datos.keyCode == teclas.LEFT )
+						{
+							if( direccion != teclas.RIGHT )
+							{
+								direccion = datos.keyCode;
+							}
+						}
+
+						if( datos.keyCode == teclas.RIGHT )
+						{
+							if( direccion != teclas.LEFT )
+							{
+								direccion = datos.keyCode;
+							}
+						}
+
+						if( datos.keyCode == 78 )
+						{
+							direccion = datos.keyCode;
+						}
 					}
 				});
 
@@ -174,21 +206,9 @@ function direccionSnake()
 		}
 		, 500 );
 }
+//--------------------------FIN DE LA FUNCION DIRECCION SNAKE---------------------------
 
-function moverSnake()
-{   
-     
-/*
-
-     setInterval( function()
-    					{
-    						teclado(direccion)
-
-    					}, 1000);
-*/
-}
-
-
+//------------------------------INICIO DE LA FUNCION DIBUJAR----------------------------
 function dibujar()
 {
 	
@@ -199,12 +219,6 @@ function dibujar()
 	}
 
 	//Luego seguimos con el snake
-	/*if( snake.imagenOK == true )
-	{
-		tablero.drawImage( snake.imagen, snake.x, snake.y );
-	}
-	*/
-
 	for(var i in snake)
 	{
 		if( snake[0].imagenOK == true )
@@ -213,12 +227,14 @@ function dibujar()
 		}
 	}
 
-	/*
+	// Despues con la comida
 	if( comida.imagenOK == true )
 	{
 		tablero.drawImage( comida.imagen, comida.x,  comida.y );
-	}*/
+	}
 }
+//--------------------------------FIN DE LA FUNCION DIBUJAR-----------------------------
+
 
 function confirmarFondo()
 {
@@ -232,8 +248,8 @@ function confirmarSnake()
 	dibujar();
 }
 
-/*function confirmarComida()
+function confirmarComida()
 {
 	comida.imagenOK = true;
 	dibujar();
-}*/
+}
