@@ -19,8 +19,8 @@ var fondo =
 var snake = 
 [
 	{
-	    x: 100,
-	    y: 100,
+	    x: 120,
+	    y: 120,
 	    imagenURL: "snake.png",
 	    imagenOK: false,
 	    velocidad: 40
@@ -29,8 +29,8 @@ var snake =
 
 var comida =
 {
-	x: 300,
-	y: 300,
+	x: 0,
+	y: 0,
 	imagenURL: "comida.png",
 	imagenOK: false
 };
@@ -47,9 +47,9 @@ function inicio()
 	fondo.imagen.onload = confirmarFondo;
 
 	//Cargando el snake
-	 snake[0].imagen = new Image();
-    snake[0].imagen.src = snake[0].imagenURL;
-    snake[0].imagen.onload = confirmarSnake;
+	snake[0].imagen = new Image();
+   snake[0].imagen.src = snake[0].imagenURL;
+   snake[0].imagen.onload = confirmarSnake;
 
 	//Cargando comida del Snake
 	comida.imagen = new Image();
@@ -58,6 +58,7 @@ function inicio()
 
 	//direccion = teclas.RIGHT;
 	direccionSnake();
+	direccionComida();
 }
 //-------------------------------FIN DE LA FUNCION INICIAL------------------------------
 
@@ -79,7 +80,7 @@ function teclado(dir)
 
 		if( snake[0].y < 0 )
 		{
-			snake[0].y = 500;
+			snake[0].y = 440;
 		}
 	}
 
@@ -93,7 +94,7 @@ function teclado(dir)
 
 		snake[0].y += snake[0].velocidad;
 
-		if( snake[0].y > 500 )
+		if( snake[0].y > 440 )
 		{
 			snake[0].y = 0;
 		}
@@ -111,7 +112,7 @@ function teclado(dir)
 		
 		if( snake[0].x < 0 )
 		{
-			snake[0].x = 500;
+			snake[0].x = 440;
 		}
 	}
 
@@ -125,14 +126,14 @@ function teclado(dir)
 
 		snake[0].x += snake[0].velocidad;
 		
-		if( snake[0].x > 500 )
+		if( snake[0].x > 440 )
 		{
 			snake[0].x = 0;
 		}
 	}
 
-	//Crecer el cuerpo con la tecla n
-	if(codigo == 78)
+	//Crecer el cuerpo al coincidir su posicion con la de la comida
+	if( (snake[0].x == comida.x) && (snake[0].y == comida.y) )
 	{
 	    var previous = snake.length - 1;
 	    
@@ -141,6 +142,8 @@ function teclado(dir)
 	    	x: snake[previous].x,
 	    	y: snake[previous].y,
        });
+
+       direccionComida();
 	}
 
 	dibujar();
@@ -207,6 +210,29 @@ function direccionSnake()
 		, 500 );
 }
 //--------------------------FIN DE LA FUNCION DIRECCION SNAKE---------------------------
+
+//------------------------INICIO DE LA FUNCION DIRECCION COMIDA-------------------------
+
+function direccionComida()
+{
+	comida.x = obtenerPosicion();
+	comida.y = obtenerPosicion();
+
+	dibujar();
+}
+
+//--------------------------FIN DE LA FUNCION DIRECCION COMIDA--------------------------
+
+function obtenerPosicion()
+{
+	var posibilidades = 11;
+	var ran = Math.random() * posibilidades;
+	ran = Math.round( ran );
+
+	var posicion = ran * 40;
+
+	return posicion;
+}
 
 //------------------------------INICIO DE LA FUNCION DIBUJAR----------------------------
 function dibujar()
