@@ -146,6 +146,18 @@ function teclado(dir)
        direccionComida();
 	}
 
+	for( var x in snake )
+	{
+		
+		if( x != 0 && x != 1 )
+		{
+			if( (snake[0].x == snake[x].x) && (snake[0].y == snake[x].y) )
+			{
+				alert( "JUEGO TERMINADO" );
+			}
+		}
+	}
+
 	dibujar();
 }
 //-------------------------------FIN DE LA FUNCION INICIAL------------------------------
@@ -162,8 +174,7 @@ function direccionSnake()
 				{
 					//Filtramos el codigo de la tecla para que sea una tecla valida
 					if( (datos.keyCode == teclas.UP) || (datos.keyCode == teclas.DOWN) || 
-						 (datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) ||
-						 (datos.keyCode == 78) )
+						 (datos.keyCode == teclas.LEFT) || (datos.keyCode == teclas.RIGHT) )
 					{
 						//Luego de filtrar teclas validas, filtramos movimientos validos
 						if( datos.keyCode == teclas.UP )
@@ -197,32 +208,43 @@ function direccionSnake()
 								direccion = datos.keyCode;
 							}
 						}
-
-						if( datos.keyCode == 78 )
-						{
-							direccion = datos.keyCode;
-						}
 					}
 				});
 
 			teclado( direccion );
 		}
-		, 500 );
+		, 200 );
 }
 //--------------------------FIN DE LA FUNCION DIRECCION SNAKE---------------------------
 
 //------------------------INICIO DE LA FUNCION DIRECCION COMIDA-------------------------
-
 function direccionComida()
 {
 	comida.x = obtenerPosicion();
 	comida.y = obtenerPosicion();
 
+	var i = 0;
+
+	//Con esto se evita colocar la comida en una posicion donde el snake este ocupando
+	while( i < snake.length )
+	{
+		if( (comida.x == snake[i].x) && (comida.y == snake[i].y) )
+		{
+			comida.x = obtenerPosicion();
+			comida.y = obtenerPosicion();
+			i = 0;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
 	dibujar();
 }
-
 //--------------------------FIN DE LA FUNCION DIRECCION COMIDA--------------------------
 
+//Funcion para crear numeros aleatorios para el posicionamiento
 function obtenerPosicion()
 {
 	var posibilidades = 11;
